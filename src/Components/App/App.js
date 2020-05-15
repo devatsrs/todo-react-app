@@ -18,13 +18,24 @@ class App extends React.Component {
 
 
     let routes = (
-      <Suspense fallback={<Loading />}>
-        <Switch>
-          <Route exact path="/login" component={Login}></Route>
-          <Route exact path="/register" component={Register}></Route>
-          <Redirect to="/login"></Redirect>
-        </Switch>
-      </Suspense>
+
+      <div className="container h-100">
+        <div className="row h-100">
+          <div className="my-auto mx-auto col-sm-12 col-lg-4 col-12">
+            <div className="shadow p-3  bg-white todo_round ">
+
+              <Suspense fallback={<Loading />}>
+                <Switch>
+                  <Route exact path="/login" component={Login}></Route>
+                  <Route exact path="/register" component={Register}></Route>
+                  <Redirect to="/login"></Redirect>
+                </Switch>
+              </Suspense>
+            </div>
+          </div>
+        </div>
+      </div>
+
     );
 
     if (this.props.loggedIn) {

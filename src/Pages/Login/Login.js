@@ -68,72 +68,64 @@ class Login extends PureComponent {
 
     return (
 
-      <div className="container">
-        <div className="row">
-          <div className=" m-auto  col-sm-12 col-lg-4 col-12">
-            <form className="form-signin  m-t-5" onSubmit={this.handleSubmit}>
-              <div className="shadow p-3 mb-auto bg-white rounded">
+      <form className="form-signin" onSubmit={this.handleSubmit}>
 
-                {alert.message &&
-                  <div className={`alert ${alert.type}`}>{alert.message}</div>
-                }
+        {alert.message &&
+          <div className={`alert ${alert.type}`}>{alert.message}</div>
+        }
+      <h3 className="h3 mb-4  font-weight-normal">Login</h3>
 
-                <h1 className="h3 mb-3 font-weight-normal">Login</h1>
-                <div className="form-group">
-                  <label className="sr-only">Email address</label>
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    className={user_error_class}
-                    placeholder="Email address"
-                    autoFocus
-                    onChange={(e) => {
-                      this.setState({ username: e.target.value });
-                    }}
-                  />
-                  {user_error_text}
-                </div>
-                <div className="form-group">
-                  <label className="sr-only">Password</label>
-
-                  <input
-                    type="password"
-                    id="password"
-                    className={pass_error_class}
-                    placeholder="Password"
-                    onChange={(e) => {
-                      this.setState({ password: e.target.value });
-                    }}
-                  />
-                  {pass_error_text}
-                </div>
-                <button
-                  className="btn btn-lg btn-primary btn-block loading"
-                  type="submit"
-                >
-                  {loggingIn ? (
-                    <span>
-                      <span
-                        className="spinner-grow spinner-grow-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                Loading...
-                    </span>
-                  ) : "Sign In"
-                  }
-                </button>
-                <div className="text-center">
-                  <Link to="/register" className="btn align-center btn-link">Register</Link>
-                </div>
-
-              </div>
-            </form>
-
-          </div>
+         <div className="form-group">
+          <label className="sr-only">Email address</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            className={user_error_class}
+            placeholder="Email address"
+            autoFocus
+            onChange={(e) => {
+              this.setState({ username: e.target.value });
+            }}
+          />
+          {user_error_text}
         </div>
-      </div>
+        <div className="form-group">
+          <label className="sr-only">Password</label>
+
+          <input
+            type="password"
+            id="password"
+            className={pass_error_class}
+            placeholder="Password"
+            onChange={(e) => {
+              this.setState({ password: e.target.value });
+            }}
+          />
+          {pass_error_text}
+        </div>
+        <button
+          className="btn btn-lg btn-primary btn-block loading"
+          type="submit"
+        >
+          {loggingIn ? (
+            <span>
+              <span
+                className="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+                Loading...
+            </span>
+          ) : "Sign In"
+          }
+        </button>
+        <div className="text-center">
+          <Link to="/register" className="btn align-center btn-link">Register</Link>
+        </div>
+
+      </form>
+
     );
   }
 }
