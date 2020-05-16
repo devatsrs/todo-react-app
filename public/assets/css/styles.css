@@ -1,3 +1,16 @@
+body{
+  font-family: 'Roboto', sans-serif;
+  color: #404040;
+  font-weight: bold;
+}
+a{
+  color: #404040;
+  
+}
+a:hover,a:focus {
+  color: #0062cc;
+  text-decoration: none;
+}
 .todo_round {
 
     border-radius: 10px;

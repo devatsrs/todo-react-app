@@ -9,6 +9,10 @@ npm install --save react react-dom react-redux react-router-dom redux-logger
 
 npm install --save react-bootstrap bootstrap
 
+npm install @material-ui/core
+npm install @material-ui/icons
+
+
 npm install --save react-saga
 
 # Todo

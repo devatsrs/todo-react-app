@@ -61,33 +61,25 @@ class Register extends PureComponent {
     }
 
     return (
-
-
-
-
       <form className="form-signin" onSubmit={this.handleSubmit} >
-
 
         {alert.message &&
           <div className={`alert ${alert.type}`}>{alert.message}</div>
         }
-
-
 
         <h3 className="h3 mb-4  font-weight-normal">Register</h3>
 
         <div className={'form-group' + (submitted && !user.firstName ? ' has-error' : '')}>
 
           <input type="text" className="form-control" name="firstName" placeholder="First Name" value={user.firstName} onChange={this.handleChange} />
-          {submitted && !user.firstName &&
-            <div className="text-danger">First Name is required</div>
-          }
+          {submitted && !user.firstName && <div className="text-danger">First Name is required</div>}
+
         </div>
         <div className={'form-group' + (submitted && !user.lastName ? ' has-error' : '')}>
+
           <input type="text" className="form-control" name="lastName" placeholder="Last Name" value={user.lastName} onChange={this.handleChange} />
-          {submitted && !user.lastName &&
-            <div className="text-danger">Last Name is required</div>
-          }
+          {submitted && !user.lastName && <div className="text-danger">Last Name is required</div>}
+
         </div>
         <div className={'form-group' + (submitted && !user.username ? ' has-error' : '')}>
           <input type="text" className="form-control" name="username" placeholder="Username" value={user.username} onChange={this.handleChange} />
