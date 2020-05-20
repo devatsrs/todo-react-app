@@ -190,8 +190,15 @@ const Todo = ({ todo, change, handleCompleted, remove }) => {
 const TodoList = ({ todos, handleShow, handleCompleted, remove }) => {
 
 
+    const [newList, setNewList] = React.useState([]);
 
-    let newList = [...todos];
+    React.useEffect(() => {
+
+        setNewList([...todos]);
+
+    }, [todos]);
+
+    ///let newList = [...todos];
     function handleSearch(search) {
 
         let _newList = [];
@@ -217,7 +224,8 @@ const TodoList = ({ todos, handleShow, handleCompleted, remove }) => {
 
         }
         // Set the filtered state based on what our rules added to newList
-        newList = _newList;
+        //newList = _newList;
+        setNewList(_newList);
 
     }
 
