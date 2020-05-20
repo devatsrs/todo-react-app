@@ -295,9 +295,7 @@ class TodoContainer extends React.PureComponent {
 
         let messageBox = "", todoList = "", newTaskModal = "", noTask = "", widgets = "";
 
-        if (loading) {
-            return "";
-        }
+
 
         if (!_.isEmpty(todos)) {
             widgets = (
@@ -316,7 +314,7 @@ class TodoContainer extends React.PureComponent {
 
         todoList = <TodoList todos={todos} handleShow={this.handleShow} handleCompleted={this.props.handleCompleted} remove={this.props.handleRemove} />
 
-        if (!_.isEmpty(alert.message)) {
+        if (!_.isEmpty(alert.message) && loading) {
             messageBox = <MessageBox type={alert.type} >{alert.message}</MessageBox>
         }
         return (
