@@ -1,33 +1,93 @@
 import { todoConstants } from "../Constants";
 
-let todo = JSON.parse(localStorage.getItem("todo"));
+let todos = JSON.parse(localStorage.getItem("todos"));
+todos = todos == null ? [] : todos;
 
-//const initialState = user ? { loggingIn: false, loggedIn: true, user } : {};
-
-export function authentication(state = {}, action) {
-
+const initialState = { todos: [] };
+export function todo(state = initialState, action) {
 
   switch (action.type) {
-    case todoConstants.TODO_ADD:
+
+    //get all
+    case todoConstants.GETALL_REQUEST:
       return {
         ...state,
-        user: action.todo,
+        loading: true,
       };
+    case todoConstants.GETALL_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        todos: todos
+      };
+    case todoConstants.GETALL_FAILURE:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    // Add
+    case todoConstants.TODO_ADD_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case todoConstants.TODO_ADD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        todos: [...state.todos, action.todo]
+      };
+    case todoConstants.TODO_ADD_FAILURE:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    //Edit @TODO
     case todoConstants.TODO_EDIT:
       return {
         ...state,
-        user: action.todo,
-      };
-    case todoConstants.TODO_DELETE:
-      return {
-        ...state,
-        user: action.todo,
+        todos: action.todos,
       };
 
-    case todoConstants.TODO_COMPLETE:
+    //delete  
+    case todoConstants.DELETE_REQUEST:
       return {
         ...state,
-        user: action.todo,
+        loading: true
+      };
+    case todoConstants.DELETE_SUCCESS:
+      return {
+        ...state,
+        todos: action.todos,
+        loading: false,
+      };
+
+    case todoConstants.DELETE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+
+    //mark completed
+    case todoConstants.COMPLETED_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case todoConstants.COMPLETED_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        todos: [...action.todos]
+      };
+    case todoConstants.COMPLETED_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
       };
     default:
       return state;

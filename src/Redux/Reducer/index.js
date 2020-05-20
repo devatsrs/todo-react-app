@@ -4,12 +4,14 @@ import { authentication } from '../Reducer/Authentication';
 import { registration } from '../Reducer/Registration';
 import { users } from '../Reducer/Users';
 import { alert } from '../Reducer/Alert';
+import { todo } from '../Reducer/Todo';
 
 const rootReducer = combineReducers({
   authentication,
   registration,
   users,
-  alert
+  alert,
+  todo
 });
 
 export default rootReducer;

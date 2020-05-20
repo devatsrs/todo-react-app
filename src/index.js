@@ -8,9 +8,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { Store } from './Redux/Store/Store';
 
 //Fake
-import { configureFakeBackend } from './Helper';
-configureFakeBackend();
+import { configureFakeBackend } from './Helper/fake-backend';
+import { configureTodoFakeBackend } from './Helper/fake-todo-backend';
 
+configureFakeBackend();
+configureTodoFakeBackend();
 
 ReactDOM.render(
   <React.StrictMode>

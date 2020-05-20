@@ -1,10 +1,48 @@
 
 import React, { useState } from 'react'
-import { FormControlLabel, Checkbox, IconButton, Dialog, DialogTitle } from '@material-ui/core';
+import { FormControlLabel, Checkbox, IconButton, Dialog, DialogTitle, Snackbar } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import "./style.css";
-
 import CanvasJSReact from './canvasjs.react';
+import { connect } from 'react-redux';
+import { todoActions } from '../../Redux/Actions/Todo';
+import MuiAlert from '@material-ui/lab/Alert';
+import _ from 'lodash';
+
+
+const MessageBox = (props) => {
+
+    const [open, setOpen] = React.useState(true);
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    }
+
+    let message = "";
+    if (props.type === "alert-error" || props.type === "alert-danger") {
+        message = (<Alert onClose={handleClose} severity="error">{props.children}</Alert>)
+    }
+    else if (props.type === "alert-warning") {
+        message = (<Alert onClose={handleClose} severity="warning">{props.children}</Alert>)
+    }
+    else if (props.type === "alert-info") {
+        message = (<Alert onClose={handleClose} severity="info">{props.children}</Alert>)
+    }
+    else if (props.type === "alert-success") {
+        message = (<Alert onClose={handleClose} severity="success">{props.children}</Alert>)
+    }
+
+
+    return (
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+            {message}
+        </Snackbar>
+    )
+}
 
 const TaskChart = ({ tasks }) => {
 
@@ -64,33 +102,27 @@ const TasksLatest = ({ tasks }) => {
 }
 
 
-const NewTaskModal = ({ show, setShow, SubmitNewTask }) => {
+const NewTaskModal = ({ show, handleShow, handleClose, handleAdd }) => {
 
     const [task, settask] = useState("");
 
-
-    const handleClose = (e) => setShow(false);
-
     function handlechange(value) {
-
         settask(value);
     }
 
-
-    function handleAddTask(e) {
+    const handleSubmit = (e) => {
 
         e.preventDefault();
-        setShow(false);
-        SubmitNewTask(task);
+        handleClose(false);
+        handleAdd(task);
 
     }
 
     return (
-
-        <Dialog ref={React.useRef(null)} onClose={handleClose} aria-labelledby="simple-dialog-title" open={show}>
+        <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={show}>
             <DialogTitle id="simple-dialog-title">+ New Task</DialogTitle>
             <div className=" pl-4 pr-4 pb-4    ">
-                <form className="form-signin" onSubmit={handleAddTask}  >
+                <form className="form-signin" onSubmit={handleSubmit}  >
                     <div className="form-group">
                         <input type="text" name="task" id="task" className="form-control" placeholder="Task Name" autoFocus onChange={(e) => handlechange(e.target.value)} />
                     </div>
@@ -98,7 +130,6 @@ const NewTaskModal = ({ show, setShow, SubmitNewTask }) => {
                 </form>
             </div>
         </Dialog>
-
     )
 }
 
@@ -118,130 +149,58 @@ const NoTask = ({ newTask, handleShow }) => {
     )
 }
 
-const Todo = ({ todo, change, complete, remove }) => {
-
-    // Each Todo
-    if (todo) {
-
-        return (
-            <li className="list-group-item" key={todo.id} >
-
-                <div className="row">
-                    <div className="col-md-6 d-flex flex-row">
+const Todo = ({ todo, change, handleCompleted, remove }) => {
 
 
-                        <FormControlLabel
-                            className={todo.completed ? "line_through" : ""}
-                            control={
-                                <Checkbox
-                                    checked={todo.completed ? "true" : ""}
-                                    onChange={(e) => complete(todo.id, e.target.checked)}
-                                    color="default"
-                                />
-                            }
-                            label={todo.text}
-                        />
-                    </div>
+    return (
+        <li className="list-group-item" key={todo.id} >
 
-                    <div className="col-md-6 d-flex flex-row-reverse">
+            <div className="row">
+                <div className="col-md-6 d-flex flex-row">
 
-                        <IconButton aria-label="delete" onClick={() => remove(todo.id)} >
-                            <Delete fontSize="small" />
-                        </IconButton>
-                    </div>
+
+                    <FormControlLabel
+                        className={todo.completed ? "line_through" : ""}
+                        control={
+                            <Checkbox
+                                checked={todo.completed ? "checked" : false}
+                                onChange={(e) => handleCompleted(todo.id, e.target.checked)}
+                                color="default"
+                            />
+                        }
+                        label={todo.text}
+                    />
                 </div>
-            </li>
-        )
-    } else {
-        return "";
-    }
 
+                <div className="col-md-6 d-flex flex-row-reverse">
 
-}
+                    <IconButton aria-label="delete" onClick={() => remove(todo.id)} >
+                        <Delete fontSize="small" />
+                    </IconButton>
+                </div>
+            </div>
+        </li>
+    )
 
-
-const TodoList = ({ todos, change, complete, remove }) => {
-
-    const todoNode = todos.map(value => <Todo key={value.id} change={change} complete={complete} todo={value} remove={remove} />);
-
-    return (<ul className="list-group m-t-2">{todoNode}</ul>);
 
 
 }
-export default function TodoContainer() {
-
-    // { "id": 1, "text": "This is task 1", completed: true },
-    // { "id": 2, "text": "This is task 2", completed: false },
-    // { "id": 3, "text": "This is task 3", completed: false },
-    // { "id": 4, "text": "This is task 4", completed: false },
-    // { "id": 5, "text": "This is task 5", completed: false },
 
 
-    const [todos, settodos] = useState([]);
-    const [filteredTodos, setfilteredTodos] = useState([]);
+const TodoList = ({ todos, handleShow, handleCompleted, remove }) => {
 
-    const [show, setShow] = useState(false);
 
-    const handleShow = (e) => setShow(true);
 
-    function changeTodoStates(newTodos) {
-        settodos(newTodos);
-        setfilteredTodos(newTodos);
-    }
-    function handleAddTask(value) {
-
-        changeTodoStates([...todos, { "id": Date().toString(), "text": value, completed: false }]);
-    }
-
-    function handleRemove(id) {
-
-        const newTodos = todos.filter((todo) => {
-            if (todo.id !== id) return todo;
-            return false;
-        });
-        changeTodoStates(newTodos);
-
-    }
-
-    function handleChange(e, id) {
-
-        const newTodos = todos.filter((todo) => {
-            if (todo.id !== id) return todo;
-            return false;
-        });
-
-        return changeTodoStates(newTodos);
-    }
-    function handleCompleted(id, completed) {
-
-        const updatedTodos = todos.filter((todo) => {
-            if (todo.id === id) {
-                todo.completed = completed
-                return todo;
-            }
-            return todo;
-
-        });
-
-        changeTodoStates(updatedTodos);
-    }
-
+    let newList = [...todos];
     function handleSearch(search) {
 
-        //https://dev.to/iam_timsmith/lets-build-a-search-bar-in-react-120j
-        // Variable to hold the original version of the list
-        let currentList = [];
-        // Variable to hold the filtered list before putting into state
-        let newList = [];
+        let _newList = [];
 
         // If the search bar isn't empty
         if (search !== "") {
-            // Assign the original list to currentList
-            currentList = todos;
-
             // Use .filter() to determine which items should be displayed
             // based on the search terms
-            newList = currentList.filter(item => {
+            _newList = todos.filter(item => {
                 // change current item to lowercase
                 const lc = item.text.toLowerCase();
                 // change search term to lowercase
@@ -251,63 +210,151 @@ export default function TodoContainer() {
                 // issues with capitalization in search terms and search content
                 return lc.includes(filter);
             });
+
         } else {
             // If the search bar is empty, set newList to original task list
-            newList = todos;
+            _newList = todos;
+
         }
         // Set the filtered state based on what our rules added to newList
-        setfilteredTodos(newList);
+        newList = _newList;
 
     }
 
-    return (
-        <div className="container h-75">
+    const todoNode = newList.map(value => <Todo key={value.id} change={handleSearch} handleCompleted={handleCompleted} todo={value} remove={remove} />);
 
-            {todos.length > 0 ? (
+    let addNewButton = "";
+    if (!_.isEmpty(todos)) {
+        addNewButton = (<div className="row pt-5">
+            <div className="col-md-6 d-flex flex-row">
+                <h3>Tasks</h3>
+            </div>
+            <div className="col-md-6 d-flex d-flex  ">
+                <input
+                    type="text"
+                    name="search"
+                    className="form-control mr-3 flex-row-reverse"
+                    placeholder="Search by tasks name"
+                    onChange={(e) => { handleSearch(e.target.value) }}
+                />
+                <button onClick={handleShow}
+                    className="btn btn-sm btn-primary text-nowrap"
+                    type="button"
+                >+ New Task</button>
+            </div></div>
+        )
+    }
+
+    return (
+        <div className="container">
+
+
+            {addNewButton}
+
+            <div className="pt-4">
+                <ul className="list-group m-t-2" key="1">{todoNode}</ul>
+            </div>
+        </div >
+    );
+
+}
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+class TodoContainer extends React.PureComponent {
+
+    state = {
+        show: false,
+    }
+
+    // { "id": 1, "text": "This is task 1", completed: true },
+    // { "id": 2, "text": "This is task 2", completed: false },
+    // { "id": 3, "text": "This is task 3", completed: false },
+    // { "id": 4, "text": "This is task 4", completed: false },
+    // { "id": 5, "text": "This is task 5", completed: false },
+
+
+    handleShow = (e) => this.setState({ show: true });
+    handleClose = (e) => this.setState({ show: false });
+
+    load_data = () => {
+
+        this.props.getAll();
+    }
+
+    componentDidMount = () => {
+
+        this.load_data();
+    }
+
+    render() {
+
+        const { todos, alert, loading } = this.props;
+
+        let messageBox = "", todoList = "", newTaskModal = "", noTask = "", widgets = "";
+
+        if (loading) {
+            return "";
+        }
+
+        if (!_.isEmpty(todos)) {
+            widgets = (
                 <div className="row">
                     <div className="col-4 col-sm-4 col-md-4"><TasksCompleted tasks={todos} /></div>
                     <div className="col-4 col-sm-4 col-md-4"><TasksLatest tasks={todos} /></div>
                     <div className="col-4 col-sm-4 col-md-4"><TaskChart tasks={todos} /></div>
                 </div>)
-                : ""}
+        }
 
-            {todos.length === 0 ? <NoTask newTask={handleAddTask} handleShow={handleShow} /> : ""}
+        if (_.isEmpty(todos)) {
+            noTask = <NoTask newTask={this.props.handleAdd} handleShow={this.handleShow} />
+        }
 
-            {show && (<NewTaskModal show={show} setShow={setShow} SubmitNewTask={handleAddTask}></NewTaskModal>)}
+        newTaskModal = <NewTaskModal show={this.state.show} handleShow={this.handleShow} handleClose={this.handleClose} handleAdd={this.props.handleAdd}></NewTaskModal>
 
-            {todos.length > 0 ? (
+        todoList = <TodoList todos={todos} handleShow={this.handleShow} handleCompleted={this.props.handleCompleted} remove={this.props.handleRemove} />
 
-                <div className="container">
+        if (!_.isEmpty(alert.message)) {
+            messageBox = <MessageBox type={alert.type} >{alert.message}</MessageBox>
+        }
+        return (
 
-                    <div className="row pt-5">
+            <div className="container h-75">
 
-                        <div className="col-md-6 d-flex flex-row">
-                            <h3>Tasks</h3>
-                        </div>
+                {widgets}
 
-                        <div className="col-md-6 d-flex d-flex  ">
-                            <input
-                                type="text"
-                                name="search"
-                                className="form-control mr-3 flex-row-reverse"
-                                placeholder="Search by tasks name"
-                                onChange={(e) => { handleSearch(e.target.value) }}
-                            />
-                            <button onClick={handleShow}
-                                className="btn btn-sm btn-primary text-nowrap"
-                                type="button"
-                            >+ New Task</button>
+                {noTask}
 
-                        </div>
-                    </div>
-                    <div className="pt-4">
-                        <TodoList todos={filteredTodos} change={handleChange} complete={handleCompleted} remove={handleRemove} />
-                    </div>
-                </div>
-            ) : ""}
+                {newTaskModal}
 
+                {todoList}
 
-        </div>
+                {messageBox}
 
-    )
+            </div>
+
+        )
+    }
 }
+
+
+
+function mapState(state) {
+
+    const { todos, loading } = state.todo;
+    const { alert } = state;
+
+    return { todos, alert, loading };
+
+}
+
+const actionCreators = {
+    handleAdd: todoActions.create,
+    getAll: todoActions.getAll,
+    handleCompleted: todoActions.completed,
+    handleRemove: todoActions.delete
+}
+
+export default connect(mapState, actionCreators)(TodoContainer);
