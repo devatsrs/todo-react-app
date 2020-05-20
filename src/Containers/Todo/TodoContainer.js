@@ -306,15 +306,15 @@ class TodoContainer extends React.PureComponent {
                 </div>)
         }
 
-        if (_.isEmpty(todos)) {
+        if (_.isEmpty(todos) && !loading) {
             noTask = <NoTask newTask={this.props.handleAdd} handleShow={this.handleShow} />
         }
-
-        newTaskModal = <NewTaskModal show={this.state.show} handleShow={this.handleShow} handleClose={this.handleClose} handleAdd={this.props.handleAdd}></NewTaskModal>
-
+        if (!loading) {
+            newTaskModal = <NewTaskModal show={this.state.show} handleShow={this.handleShow} handleClose={this.handleClose} handleAdd={this.props.handleAdd}></NewTaskModal>
+        }
         todoList = <TodoList todos={todos} handleShow={this.handleShow} handleCompleted={this.props.handleCompleted} remove={this.props.handleRemove} />
 
-        if (!_.isEmpty(alert.message) && loading) {
+        if (!_.isEmpty(alert.message) && !loading) {
             messageBox = <MessageBox type={alert.type} >{alert.message}</MessageBox>
         }
         return (
