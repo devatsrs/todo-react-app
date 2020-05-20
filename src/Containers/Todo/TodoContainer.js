@@ -156,7 +156,7 @@ const Todo = ({ todo, change, handleCompleted, remove }) => {
         <li className="list-group-item" key={todo.id} >
 
             <div className="row">
-                <div className="col-md-6 d-flex flex-row">
+                <div className="col-6 col-md-6 d-flex flex-row">
 
 
                     <FormControlLabel
@@ -172,7 +172,7 @@ const Todo = ({ todo, change, handleCompleted, remove }) => {
                     />
                 </div>
 
-                <div className="col-md-6 d-flex flex-row-reverse">
+                <div className="col-6 col-md-6 d-flex flex-row-reverse">
 
                     <IconButton aria-label="delete" onClick={() => remove(todo.id)} >
                         <Delete fontSize="small" />
@@ -234,10 +234,10 @@ const TodoList = ({ todos, handleShow, handleCompleted, remove }) => {
     let addNewButton = "";
     if (!_.isEmpty(todos)) {
         addNewButton = (<div className="row pt-5">
-            <div className="col-md-6 d-flex flex-row">
+            <div className="col-12 col-md-6 d-flex flex-row">
                 <h3>Tasks</h3>
             </div>
-            <div className="col-md-6 d-flex d-flex  ">
+            <div className="col-12 col-md-6 d-flex d-flex  ">
                 <input
                     type="text"
                     name="search"
@@ -308,9 +308,9 @@ class TodoContainer extends React.PureComponent {
         if (!_.isEmpty(todos)) {
             widgets = (
                 <div className="row">
-                    <div className="col-4 col-sm-4 col-md-4"><TasksCompleted tasks={todos} /></div>
-                    <div className="col-4 col-sm-4 col-md-4"><TasksLatest tasks={todos} /></div>
-                    <div className="col-4 col-sm-4 col-md-4"><TaskChart tasks={todos} /></div>
+                    <div className="col-12 pb-2 col-sm-4 col-md-4"><TasksCompleted tasks={todos} /></div>
+                    <div className="col-12 pb-2 col-sm-4 col-md-4"><TasksLatest tasks={todos} /></div>
+                    <div className="col-12 pb-2 col-sm-4 col-md-4"><TaskChart tasks={todos} /></div>
                 </div>)
         }
 
