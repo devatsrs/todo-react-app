@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { FormControlLabel, Checkbox, IconButton, Dialog, DialogTitle, Snackbar } from '@material-ui/core';
-import { Delete } from '@material-ui/icons';
+import { Delete, Edit } from '@material-ui/icons';
 import "./style.css";
 import CanvasJSReact from './canvasjs.react';
 import { connect } from 'react-redux';
@@ -149,30 +149,118 @@ const NoTask = ({ newTask, handleShow }) => {
     )
 }
 
-const Todo = ({ todo, change, handleCompleted, remove }) => {
+const Todo = ({ todo, update, handleCompleted, remove }) => {
+
+    const wrapperRef = useRef(null);
+
+    const [show, setShow] = useState(false);
+
+    const [newTask, setNewTask] = useState(todo.text);
+
+    const KEY_ESCAP = 27;
+
+    const handleKeyDown = (e) => {
+
+        if (e.keyCode === KEY_ESCAP) { // escape key maps to keycode `27`
+            setShow(false);
+
+        }
 
 
+    }
+
+    const handleChange = (e) => {
+
+
+        setNewTask(e.target.value);
+
+    }
+
+
+    const handleSubmit = (e, todo) => {
+
+        e.preventDefault();
+
+        const new_todo = { ...todo, "text": newTask };
+        update(new_todo);
+        setShow(false);
+    }
+
+
+
+    function useOutsideAlerter(ref) {
+        useEffect(() => {
+            /**
+             * Alert if clicked on outside of element
+             */
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    setShow(false);//                    alert("You clicked outside of me!");
+                }
+            }
+
+            // Bind the event listener
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                // Unbind the event listener on clean up
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [ref]);
+    }
+    useOutsideAlerter(wrapperRef);
     return (
+
+
         <li className="list-group-item" key={todo.id} >
 
             <div className="row">
-                <div className="col-6 col-md-6 d-flex flex-row">
+                <div className="col-10 col-md-10 d-flex flex-row">
 
+                    {
+                        show ? (
+                            <form ref={wrapperRef} onSubmit={(e) => handleSubmit(e, todo)} className="d-flex w-100" >
+                                <div className="col-10 col-md-10 "><input
+                                    type="text"
+                                    name="todo_text"
+                                    className="form-control mr-3"
+                                    defaultValue={todo.text}
+                                    onChange={handleChange}
+                                    onKeyDown={handleKeyDown}
+                                    autoFocus
+                                /></div>
+                                <div className="col-2 col-md-2 ">
+                                    <button className="btn   btn-primary  "><svg class="bi bi-check-box" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M15.354 2.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3-3a.5.5 0 11.708-.708L8 9.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M1.5 13A1.5 1.5 0 003 14.5h10a1.5 1.5 0 001.5-1.5V8a.5.5 0 00-1 0v5a.5.5 0 01-.5.5H3a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5h8a.5.5 0 000-1H3A1.5 1.5 0 001.5 3v10z" clip-rule="evenodd" />
+                                    </svg>
+                                    </button>
 
-                    <FormControlLabel
-                        className={todo.completed ? "line_through" : ""}
-                        control={
-                            <Checkbox
-                                checked={todo.completed ? "checked" : false}
-                                onChange={(e) => handleCompleted(todo.id, e.target.checked)}
-                                color="default"
+                                </div>
+
+                            </form>
+                        ) :
+                            <FormControlLabel
+                                className={todo.completed ? "line_through w-100" : "w-100 "}
+                                name="task_checkbox"
+                                onDoubleClick={() => setShow(true)}
+                                control={
+                                    <Checkbox
+                                        checked={todo.completed ? true : false}
+                                        onChange={(e) => handleCompleted(todo.id, e.target.checked)}
+                                        color="default"
+                                    />
+                                }
+                                label={todo.text}
                             />
-                        }
-                        label={todo.text}
-                    />
+                    }
+
                 </div>
 
-                <div className="col-6 col-md-6 d-flex flex-row-reverse">
+                <div className="col-2 col-md-2 text-right">
+
+                    <IconButton aria-label="update" onClick={() => setShow(true)}   >
+                        <Edit fontSize="small" />
+                    </IconButton>
 
                     <IconButton aria-label="delete" onClick={() => remove(todo.id)} >
                         <Delete fontSize="small" />
@@ -187,11 +275,21 @@ const Todo = ({ todo, change, handleCompleted, remove }) => {
 }
 
 
-const TodoList = ({ todos, handleShow, handleCompleted, remove }) => {
+const TodoList = ({ todos, handleShow, handleCompleted, update, remove }) => {
 
 
     const [newList, setNewList] = React.useState([]);
 
+    const KEY_ESCAP = 27;
+
+    const handleKeyDown = (e) => {
+
+        if (e.keyCode === KEY_ESCAP) { // escape key maps to keycode `27`
+            e.target.value = "";
+        }
+
+
+    }
     React.useEffect(() => {
 
         setNewList([...todos]);
@@ -229,7 +327,7 @@ const TodoList = ({ todos, handleShow, handleCompleted, remove }) => {
 
     }
 
-    const todoNode = newList.map(value => <Todo key={value.id} change={handleSearch} handleCompleted={handleCompleted} todo={value} remove={remove} />);
+    const todoNode = newList.map(value => <Todo key={value.id} update={update} handleCompleted={handleCompleted} todo={value} remove={remove} />);
 
     let addNewButton = "";
     if (!_.isEmpty(todos)) {
@@ -237,13 +335,14 @@ const TodoList = ({ todos, handleShow, handleCompleted, remove }) => {
             <div className="col-12 col-md-6 d-flex flex-row">
                 <h3>Tasks</h3>
             </div>
-            <div className="col-12 col-md-6 d-flex d-flex  ">
+            <div className="col-12 col-md-6 d-flex   ">
                 <input
                     type="text"
                     name="search"
                     className="form-control mr-3 flex-row-reverse"
                     placeholder="Search by tasks name"
                     onChange={(e) => { handleSearch(e.target.value) }}
+                    onKeyDown={handleKeyDown}
                 />
                 <button onClick={handleShow}
                     className="btn btn-sm btn-primary text-nowrap"
@@ -320,7 +419,7 @@ class TodoContainer extends React.PureComponent {
         if (!loading) {
             newTaskModal = <NewTaskModal show={this.state.show} handleShow={this.handleShow} handleClose={this.handleClose} handleAdd={this.props.handleAdd}></NewTaskModal>
         }
-        todoList = <TodoList todos={todos} handleShow={this.handleShow} handleCompleted={this.props.handleCompleted} remove={this.props.handleRemove} />
+        todoList = <TodoList todos={todos} update={this.props.handleUpdate} handleShow={this.handleShow} handleCompleted={this.props.handleCompleted} remove={this.props.handleRemove} />
 
         if (!_.isEmpty(alert.message) && !loading) {
             messageBox = <MessageBox type={alert.type} >{alert.message}</MessageBox>
@@ -360,7 +459,8 @@ const actionCreators = {
     handleAdd: todoActions.create,
     getAll: todoActions.getAll,
     handleCompleted: todoActions.completed,
-    handleRemove: todoActions.delete
+    handleRemove: todoActions.delete,
+    handleUpdate: todoActions.update
 }
 
 export default connect(mapState, actionCreators)(TodoContainer);

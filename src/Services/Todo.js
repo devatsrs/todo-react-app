@@ -51,7 +51,7 @@ function update(todo) {
     body: JSON.stringify(todo),
   };
 
-  return fetch(`${config.apiUrl}/todos/${todo.id}`, requestOptions).then(
+  return fetch(`${config.apiUrl}/todos/update/${todo.id}`, requestOptions).then(
     handleResponse
   );
 }
@@ -68,6 +68,8 @@ function completed(id, completed) {
     handleResponse
   );
 }
+
+
 
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {

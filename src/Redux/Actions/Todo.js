@@ -8,6 +8,7 @@ export const todoActions = {
   getAll,
   completed,
   delete: _delete,
+  update
 };
 
 
@@ -117,5 +118,41 @@ function _delete(id) {
   }
   function failure(id, error) {
     return { type: todoConstants.DELETE_FAILURE, id, error };
+  }
+}
+
+
+//update 
+function update(todo) {
+
+
+  //const todo = { "id": Date().toString(), "text": value, completed: false };
+
+  return (dispatch) => {
+
+    dispatch(request(todo));
+
+    todoService.update(todo).then(
+      (todos) => {
+
+        dispatch(success(todos));
+        //history.push("/login");
+        dispatch(alertActions.success("Task updated"));
+      },
+      (error) => {
+        dispatch(failure(error.toString()));
+        dispatch(alertActions.error(error.toString()));
+      }
+    );
+  };
+
+  function request(todo) {
+    return { type: todoConstants.EDIT_REQUEST, todo };
+  }
+  function success(todos) {
+    return { type: todoConstants.EDIT_SUCCESS, todos };
+  }
+  function failure(error) {
+    return { type: todoConstants.EDIT_FAILURE, todo, error };
   }
 }

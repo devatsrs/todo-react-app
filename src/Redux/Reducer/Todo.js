@@ -89,6 +89,25 @@ export function todo(state = initialState, action) {
         loading: false,
         error: action.error
       };
+
+    //update 
+    case todoConstants.EDIT_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case todoConstants.EDIT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        todos: [...action.todos]
+      };
+    case todoConstants.EDIT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
     default:
       return state;
   }
