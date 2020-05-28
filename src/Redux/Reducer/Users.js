@@ -2,6 +2,11 @@ import { userConstants } from '../Constants';
 
 export function users(state = {}, action) {
   switch (action.type) {
+    case userConstants.LOGOUT:
+      return {
+        loading: false
+      };
+
     case userConstants.GETALL_REQUEST:
       return {
         loading: true
@@ -11,7 +16,7 @@ export function users(state = {}, action) {
         items: action.users
       };
     case userConstants.GETALL_FAILURE:
-      return { 
+      return {
         error: action.error
       };
     case userConstants.DELETE_REQUEST:

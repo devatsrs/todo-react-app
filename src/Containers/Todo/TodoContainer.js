@@ -163,10 +163,7 @@ const Todo = ({ todo, update, handleCompleted, remove }) => {
 
         if (e.keyCode === KEY_ESCAP) { // escape key maps to keycode `27`
             setShow(false);
-
         }
-
-
     }
 
     const handleChange = (e) => {
@@ -187,18 +184,14 @@ const Todo = ({ todo, update, handleCompleted, remove }) => {
     }
 
 
-
+    //onoutside click hide edit box
     function useOutsideAlerter(ref) {
         useEffect(() => {
-            /**
-             * Alert if clicked on outside of element
-             */
             function handleClickOutside(event) {
                 if (ref.current && !ref.current.contains(event.target)) {
                     setShow(false);//                    alert("You clicked outside of me!");
                 }
             }
-
             // Bind the event listener
             document.addEventListener("mousedown", handleClickOutside);
             return () => {
@@ -207,7 +200,9 @@ const Todo = ({ todo, update, handleCompleted, remove }) => {
             };
         }, [ref]);
     }
+    //call useOutsideAlerter when first time loaded
     useOutsideAlerter(wrapperRef);
+
     return (
 
 
@@ -229,9 +224,9 @@ const Todo = ({ todo, update, handleCompleted, remove }) => {
                                     autoFocus
                                 /></div>
                                 <div className="col-2 col-md-2 ">
-                                    <button className="btn   btn-primary  "><svg class="bi bi-check-box" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M15.354 2.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3-3a.5.5 0 11.708-.708L8 9.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd" />
-                                        <path fill-rule="evenodd" d="M1.5 13A1.5 1.5 0 003 14.5h10a1.5 1.5 0 001.5-1.5V8a.5.5 0 00-1 0v5a.5.5 0 01-.5.5H3a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5h8a.5.5 0 000-1H3A1.5 1.5 0 001.5 3v10z" clip-rule="evenodd" />
+                                    <button className="btn   btn-primary  "><svg className="bi bi-check-box" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fillRule="evenodd" d="M15.354 2.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3-3a.5.5 0 11.708-.708L8 9.293l6.646-6.647a.5.5 0 01.708 0z" clipRule="evenodd" />
+                                        <path fillRule="evenodd" d="M1.5 13A1.5 1.5 0 003 14.5h10a1.5 1.5 0 001.5-1.5V8a.5.5 0 00-1 0v5a.5.5 0 01-.5.5H3a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5h8a.5.5 0 000-1H3A1.5 1.5 0 001.5 3v10z" clipRule="evenodd" />
                                     </svg>
                                     </button>
 
@@ -243,6 +238,7 @@ const Todo = ({ todo, update, handleCompleted, remove }) => {
                                 className={todo.completed ? "line_through w-100" : "w-100 "}
                                 name="task_checkbox"
                                 onDoubleClick={() => setShow(true)}
+
                                 control={
                                     <Checkbox
                                         checked={todo.completed ? true : false}

@@ -35,13 +35,11 @@ class Login extends PureComponent {
 
     if (username && password) {
 
-      this.props.login(username, password);
+      this.props.login(username, password).then(() => {
 
-      setTimeout(() => {
-        if (this.props.loggedIn) {
-          this.props.history.push("/dashbord");
-        }
-      }, 5);
+        this.props.history.push("/dashbord");
+
+      }).catch(error => this.props.logout());
 
     }
 
@@ -73,9 +71,9 @@ class Login extends PureComponent {
         {alert.message &&
           <div className={`alert ${alert.type}`}>{alert.message}</div>
         }
-      <h3 className="h3 mb-4  font-weight-normal">Login</h3>
+        <h3 className="h3 mb-4  font-weight-normal">Login</h3>
 
-         <div className="form-group">
+        <div className="form-group">
           <label className="sr-only">Email address</label>
           <input
             type="text"
@@ -143,7 +141,7 @@ const mapAction = {
 
   login: userActions.login,
 
-  logout: userActions.logout,
+  logout: userActions.user_logout,
 
   clearAlerts: alertActions.clear,
 

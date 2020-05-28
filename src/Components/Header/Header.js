@@ -33,7 +33,7 @@ class Header extends PureComponent {
                 <div className="container">
                     <div className="row">
                         <div className="col-6 col-sm-6 col-md-6 d-flex flex-row">
-                            <img src="https://www.w3schools.com/howto/img_avatar.png" className="rounded-circle mr-3" alt="Avatar" width="50" />
+                            <img src="/assets/images/avatars/img_avatar.png" className="rounded-circle mr-3" alt="Avatar" width="50" />
                             <h5 className="my-2 font-weight-normal">{this.props.user.firstName}</h5>
                         </div>
                         <div className="col-6 col-sm-6 col-md-6 d-flex flex-row-reverse">

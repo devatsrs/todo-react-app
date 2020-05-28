@@ -55,7 +55,11 @@ function completed(id, completed) {
     todoService.completed(id, completed).then(
       (todos) => {
         dispatch(success(todos));
-        dispatch(alertActions.success("Task completed successfully"));
+        let message = "Task uncompleted successfully";
+        if (completed) {
+          message = "Task completed successfully";
+        }
+        dispatch(alertActions.success(message));
 
       },
       (error) => dispatch(failure(id, error.toString()))

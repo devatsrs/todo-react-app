@@ -15,18 +15,31 @@ export const userActions = {
 function login(username, password) {
   return (dispatch) => {
 
-    dispatch(request({ username }));
+    // https://github.com/devatsrs/react-redux-links
+    //https://www.bacancytechnology.com/blog/3-react-architecture-practices
+    //https://www.sitepoint.com/react-architecture-best-practices/
+    return new Promise(function (resolve, reject) {
 
-    userService.login(username, password).then(
-      (user) => {
-        dispatch(success(user));
-        //history.push("/dashbord");
-      },
-      (error) => {
+      dispatch(request({ username }));
+      userService.login(username, password).then(
+        (user) => {
+          dispatch(success(user));
+          //history.push("/dashbord");
+          resolve();
+        },
+        (error) => {
+          dispatch(failure(error.toString()));
+          dispatch(alertActions.error(error.toString()));
+          reject();
+        }
+      ).catch(error => {
         dispatch(failure(error.toString()));
         dispatch(alertActions.error(error.toString()));
-      }
-    );
+        reject();
+      });
+
+    });
+
   };
 
   function request(user) {

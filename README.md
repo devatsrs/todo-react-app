@@ -52,5 +52,5 @@ npm install --save react-saga
 
   - npm run build
   - heroku create dev-todo-react-app --buildpack mars/create-react-app
-  - git push heroku master...
+  - git push heroku master
   - heroku open
