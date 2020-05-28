@@ -1,6 +1,7 @@
 -------------------------------------------------------------------------------------
 README.md
 -------------------------------------------------------------------------------------
+<![alt](https://i.ibb.co/DV25MsF/screenshot.jpg) 
 
 # Packages used 
 npm install --save react react-dom react-redux react-router-dom redux-logger
