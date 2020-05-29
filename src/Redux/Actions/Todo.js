@@ -8,32 +8,36 @@ export const todoActions = {
   getAll,
   completed,
   delete: _delete,
-  update
+  update,
 };
 
-
-
 function create(value) {
-
-
-  const todo = { "id": Date().toString(), "text": value, completed: false };
+  const todo = { id: Date().toString(), text: value, completed: false };
 
   return (dispatch) => {
-
     dispatch(request(todo));
-
-    todoService.create(todo).then(
-      (todo) => {
-
-        dispatch(success(todo));
-        //history.push("/login");
-        dispatch(alertActions.success("Task created"));
-      },
-      (error) => {
-        dispatch(failure(error.toString()));
-        dispatch(alertActions.error(error.toString()));
-      }
-    );
+    return new Promise(function (resolve, reject) {
+      todoService
+        .create(todo)
+        .then(
+          (todo) => {
+            dispatch(success(todo));
+            //history.push("/login");
+            dispatch(alertActions.success("Task created"));
+            resolve();
+          },
+          (error) => {
+            dispatch(failure(error.toString()));
+            dispatch(alertActions.error(error.toString()));
+            reject(error);
+          }
+        )
+        .catch((error) => {
+          dispatch(failure(error.toString()));
+          dispatch(alertActions.error(error.toString()));
+          reject(error);
+        });
+    });
   };
 
   function request(todo) {
@@ -47,7 +51,6 @@ function create(value) {
   }
 }
 
-
 function completed(id, completed) {
   return (dispatch) => {
     dispatch(request(id));
@@ -60,7 +63,6 @@ function completed(id, completed) {
           message = "Task completed successfully";
         }
         dispatch(alertActions.success(message));
-
       },
       (error) => dispatch(failure(id, error.toString()))
     );
@@ -108,7 +110,7 @@ function _delete(id) {
         dispatch(alertActions.success("Task deleted successfully"));
       },
       (error) => {
-        dispatch(failure(id, error.toString()))
+        dispatch(failure(id, error.toString()));
         dispatch(alertActions.error(error.toString()));
       }
     );
@@ -125,20 +127,15 @@ function _delete(id) {
   }
 }
 
-
-//update 
+//update
 function update(todo) {
-
-
   //const todo = { "id": Date().toString(), "text": value, completed: false };
 
   return (dispatch) => {
-
     dispatch(request(todo));
 
     todoService.update(todo).then(
       (todos) => {
-
         dispatch(success(todos));
         //history.push("/login");
         dispatch(alertActions.success("Task updated"));

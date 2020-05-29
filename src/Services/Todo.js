@@ -10,15 +10,17 @@ export const todoService = {
   delete: _delete,
 };
 
-
-
 function getAll() {
   const requestOptions = {
     method: "GET",
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/todos`, requestOptions).then(handleResponse);
+  return fetch(`${config.apiUrl}/todos`, requestOptions)
+    .then(handleResponse)
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function getById(id) {
@@ -27,9 +29,11 @@ function getById(id) {
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/todos/${id}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(`${config.apiUrl}/todos/${id}`, requestOptions)
+    .then(handleResponse)
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function create(todo) {
@@ -39,9 +43,11 @@ function create(todo) {
     body: JSON.stringify(todo),
   };
 
-  return fetch(`${config.apiUrl}/todos/create`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(`${config.apiUrl}/todos/create`, requestOptions)
+    .then(handleResponse)
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function update(todo) {
@@ -51,25 +57,26 @@ function update(todo) {
     body: JSON.stringify(todo),
   };
 
-  return fetch(`${config.apiUrl}/todos/update/${todo.id}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(`${config.apiUrl}/todos/update/${todo.id}`, requestOptions)
+    .then(handleResponse)
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function completed(id, completed) {
   const requestOptions = {
     method: "POST",
     headers: authHeader(),
-    body: JSON.stringify({ "completed": completed }),
-
+    body: JSON.stringify({ completed: completed }),
   };
 
-  return fetch(`${config.apiUrl}/todos/completed/${id}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(`${config.apiUrl}/todos/completed/${id}`, requestOptions)
+    .then(handleResponse)
+    .catch((error) => {
+      throw error;
+    });
 }
-
-
 
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
@@ -78,9 +85,11 @@ function _delete(id) {
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/todos/${id}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(`${config.apiUrl}/todos/${id}`, requestOptions)
+    .then(handleResponse)
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function handleResponse(response) {

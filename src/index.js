@@ -1,17 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './Components/App/App';
-import * as serviceWorker from './serviceWorker';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { Store } from './Redux/Store/Store';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./Components/App/App";
+import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { Store } from "./Redux/Store/Store";
 
 //Fake
-import { configureFakeBackend } from './Helper/fake-backend';
-import { configureTodoFakeBackend } from './Helper/fake-todo-backend';
+import { configureFakeBackend } from "./Helper/fake-backend";
 
-configureTodoFakeBackend();
 configureFakeBackend();
 
 ReactDOM.render(
@@ -19,9 +17,8 @@ ReactDOM.render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </Provider>
-  ,
-  document.getElementById('root')
+  </Provider>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
