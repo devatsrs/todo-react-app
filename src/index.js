@@ -11,8 +11,8 @@ import { Store } from './Redux/Store/Store';
 import { configureFakeBackend } from './Helper/fake-backend';
 import { configureTodoFakeBackend } from './Helper/fake-todo-backend';
 
-configureFakeBackend();
 configureTodoFakeBackend();
+configureFakeBackend();
 
 ReactDOM.render(
   <Provider store={Store}>

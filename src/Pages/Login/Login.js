@@ -103,7 +103,7 @@ class Login extends PureComponent {
           {pass_error_text}
         </div>
         <button
-          className="btn btn-lg btn-primary btn-block loading"
+          className="btn btn-lg btn-primary btn-block"
           type="submit"
         >
           {loggingIn ? (
